@@ -89,9 +89,9 @@ const CategoryProduct = () => {
 
   }, [sortBy])
   return (
-    <div className='container mx-auto p-4'>
+    <div className='container mx-auto p-4 '>
       {/**Desktop version */}
-      <div className='hidden lg:grid grid-cols-[250px,1fr] -ml-4'>
+      <div className='hidden lg:grid grid-cols-[250px,1fr] -ml-4 '>
         {/**left side */}
         <div className='bg-white p-2 min-h-[calc(100vh-120px)] overflow-y-scroll '>
           {/* sort by */}
