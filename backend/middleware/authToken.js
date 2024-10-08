@@ -6,7 +6,7 @@ async function authToken(req,res,next) {
             
             if(!token){
                 return res.status(200).json({
-                    message:"Plase Login...!",
+                    message:"Please Login...!",
                     error:true,
                     success:false
                 })

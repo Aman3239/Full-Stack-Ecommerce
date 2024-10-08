@@ -76,7 +76,7 @@ const CategoryProduct = () => {
   return (
     <div className='container mx-auto p-4'>
       {/** Mobile Version Toggle Button */}
-      <button className="lg:hidden bg-blue-500 text-white p-2 mb-2 -mt-2 hover:bg-blue-600 rounded-full" onClick={() => setShowFilters(prev => !prev)}>
+      <button className="lg:hidden bg-blue-500 text-white p-2 text-sm -mb-4 -mt-2 hover:bg-blue-600 rounded-full" onClick={() => setShowFilters(prev => !prev)}>
         {showFilters ? "Hide Filters" : "Show Filters"}
       </button>
 
