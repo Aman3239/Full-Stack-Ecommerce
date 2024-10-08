@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import productCategory from '../helpers/productCategory'
 import VerticalCard from '../components/VerticalCard'
 import SummaryApi from '../common'
@@ -21,6 +21,7 @@ const CategoryProduct = () => {
   const [filterCategoryList, setFilterCategoryList] = useState([])
 
   const [sortBy, setSortBy] = useState("")
+  const [showFilters, setShowFilters] = useState(false)
 
   const fetchData = async () => {
     const response = await fetch(SummaryApi.filterProduct.url, {
@@ -38,105 +39,84 @@ const CategoryProduct = () => {
   }
 
   const handleSelectCategory = (e) => {
-    const { name, value, checked } = e.target
-
-    setSelectCategory((preve) => {
-      return {
-        ...preve,
-        [value]: checked
-      }
-    })
-
+    const { value, checked } = e.target
+    setSelectCategory((prev) => ({
+      ...prev,
+      [value]: checked
+    }))
   }
 
   useEffect(() => {
     fetchData()
   }, [filterCategoryList])
+
   useEffect(() => {
-    const arrayOfCategory = Object.keys(selectCategory).map(categoryKeyName => {
-      if (selectCategory[categoryKeyName]) {
-        return categoryKeyName
-      }
-      return null
-    }).filter(el => el)
+    const arrayOfCategory = Object.keys(selectCategory).filter(categoryKeyName => selectCategory[categoryKeyName])
     setFilterCategoryList(arrayOfCategory)
 
-    // format for url change when change the check box
-    const urlFromat = arrayOfCategory.map((el, index) => {
-      if ((arrayOfCategory.length - 1) === index) {
-        return `category=${el}`
-      }
-      return `category=${el}&&`
-    })
-    navigate("/product-category?" + urlFromat.join(""))
+    const urlFromat = arrayOfCategory.map(el => `category=${el}`).join("&&")
+    navigate("/product-category?" + urlFromat)
   }, [selectCategory])
 
   const handleOnchangeSortBy = (e) => {
     const { value } = e.target
-
     setSortBy(value)
+    const sortedData = [...data]
+    
     if (value === "asc") {
-      setData(preve => preve.sort((a, b) => a.sellingPrice - b.sellingPrice))
+      sortedData.sort((a, b) => a.sellingPrice - b.sellingPrice)
     }
-
     if (value === "dsc") {
-      setData(preve => preve.sort((a, b) => b.sellingPrice - a.sellingPrice))
+      sortedData.sort((a, b) => b.sellingPrice - a.sellingPrice)
     }
+    
+    setData(sortedData)
   }
 
-
-  useEffect(() => {
-
-  }, [sortBy])
   return (
-    <div className='container mx-auto p-4 '>
-      {/**Desktop version */}
-      <div className='hidden lg:grid grid-cols-[250px,1fr] -ml-4 '>
-        {/**left side */}
-        <div className='bg-white p-2 min-h-[calc(100vh-120px)] overflow-y-scroll '>
-          {/* sort by */}
-          <div className=''>
+    <div className='container mx-auto p-4'>
+      {/** Mobile Version Toggle Button */}
+      <button className="lg:hidden bg-blue-500 text-white p-2 mb-2 -mt-2 hover:bg-blue-600 rounded-full" onClick={() => setShowFilters(prev => !prev)}>
+        {showFilters ? "Hide Filters" : "Show Filters"}
+      </button>
+
+      <div className='lg:grid grid-cols-[250px,1fr] -ml-4'>
+        {/** Left Side (Filters) */}
+        <div className={`bg-white p-2 min-h-[calc(100vh-120px)] overflow-y-scroll ${showFilters ? '' : 'hidden lg:block'}`}>
+          {/* Sort By */}
+          <div>
             <h3 className='text-lg uppercase font-bold text-slate-500 border-b pb-1 border-slate-300'>Sort by</h3>
-            <form action="" className='text-sm flex flex-col gap-2 py-2'>
+            <form className='text-sm flex flex-col gap-2 py-2'>
               <div className='flex items-center text-lg gap-3'>
                 <input type="radio" name="sortBy" value={"asc"} checked={sortBy === "asc"} onChange={handleOnchangeSortBy} />
-                <label htmlFor="">Price - Low to High</label>
+                <label>Price - Low to High</label>
               </div>
-
               <div className='flex items-center gap-3 text-lg'>
                 <input type="radio" name="sortBy" value={"dsc"} checked={sortBy === "dsc"} onChange={handleOnchangeSortBy} />
-                <label htmlFor="">Price - High to Low</label>
+                <label>Price - High to Low</label>
               </div>
             </form>
           </div>
 
-          {/* filter by */}
-          <div className=''>
+          {/* Filter By */}
+          <div>
             <h3 className='text-lg uppercase font-bold text-slate-500 border-b pb-1 border-slate-300'>Category</h3>
-            <form action="" className='text-lg flex flex-col gap-2 py-2'>
-              {
-                productCategory.map((categoryName, index) => {
-                  return (
-                    <div className='flex items-center gap-3'>
-                      <input type="checkbox" name={"category"} checked={selectCategory[categoryName?.value]} value={categoryName?.value} id={categoryName?.value} onChange={handleSelectCategory} />
-                      <label htmlFor={categoryName?.value}>{categoryName?.label}</label>
-                    </div>
-                  )
-                })
-              }
+            <form className='text-lg flex flex-col gap-2 py-2'>
+              {productCategory.map((categoryName) => (
+                <div className='flex items-center gap-3' key={categoryName.value}>
+                  <input type="checkbox" name="category" checked={selectCategory[categoryName.value]} value={categoryName.value} id={categoryName.value} onChange={handleSelectCategory} />
+                  <label htmlFor={categoryName.value}>{categoryName.label}</label>
+                </div>
+              ))}
             </form>
           </div>
         </div>
 
-        {/* right side (product)*/}
-        <div className='px-4' >
-          <p className='font-medium text-slate-800 text-lg my-2'>Search Result : {data.length}</p>
+        {/** Right Side (Products) */}
+        <div className='px-4'>
+          <p className='font-medium text-slate-800 text-lg my-2'>Search Result: {data.length}</p>
           <div className='min-h-[calc(100vh-120px)] max-h-[calc(100vh-120px)] overflow-y-scroll'>
-            {
-              data.length !== 0 && (
-                <VerticalCard data={data} loading={loading} />
-              )
-            }
+            {data.length !== 0 && <VerticalCard data={data} loading={loading} />}
           </div>
         </div>
       </div>
