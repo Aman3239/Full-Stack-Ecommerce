@@ -74,7 +74,7 @@ const Header = () => {
                 <div className='lg:hidden '>
                     <div className='flex items-center h-7 pl-2 border rounded-full focus-within:shadow '>
                         <input
-                            className='w-20 outline-none text-center text-sm'
+                            className='w-20 outline-none text-sm'
                             type="text "
                             placeholder='Search...'
                             onChange={handleSearch}
