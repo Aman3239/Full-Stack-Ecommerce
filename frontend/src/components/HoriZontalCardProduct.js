@@ -53,7 +53,7 @@ const HoriZontalCardProduct = ({ category, heading }) => {
                 {   loading?(
                     loadingList.map((product, index) => {
                         return (
-                            <div className='w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-sm shadow flex'>
+                            <div className='w-full min-w-[300px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-sm shadow flex'>
                                 <div className='bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px] animate-pulse'>
  
                                 </div>
@@ -73,14 +73,14 @@ const HoriZontalCardProduct = ({ category, heading }) => {
                 ):(
                     data.map((product, index) => {
                         return (
-                            <Link to={"product/"+product?._id} className='w-full min-w-[280px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-sm shadow flex'>
+                            <Link to={"product/"+product?._id} className='w-full min-w-[300px] md:min-w-[320px] max-w-[280px] md:max-w-[320px] h-36 bg-white rounded-sm shadow flex'>
                                 <div className='bg-slate-200 h-full p-4 min-w-[120px] md:min-w-[145px]'>
                                     <img src={product.productImage[0]} alt="" className='h-full object-scale-down hover:scale-110 transition-all' />
                                 </div>
                                 <div className='p-4 grid'>
                                         <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
                                         <p className='capitalize text-slate-500'>{product.category}</p>
-                                        <div className='flex gap-3'>
+                                        <div className='flex gap-2'>
                                             <p className='text-red-600 font-medium'>{displayCurrency(product?.sellingPrice)}</p>
                                             <p className='text-slate-500 line-through'>{displayCurrency(product?.price)}</p>
                                         </div>

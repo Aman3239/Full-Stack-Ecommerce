@@ -7,6 +7,7 @@ import displayCurrency from '../helpers/displayCurrency';
 import CategoryWiseProductDisplay from '../components/CategoryWiseProductDisplay';
 import addToCart from '../helpers/addToCart';
 import Context from '../context';
+import { toast } from 'react-toastify';
  
 const ProductDetails = () => {
     const [data, setData] = useState({
@@ -80,17 +81,18 @@ const ProductDetails = () => {
         fetchUserAddToCart()
     }
 
-    const handleBuyProduct =async(e,id)=>{
-        await addToCart(e,id)
-        fetchUserAddToCart()
-        navigate("/cart")
-    }
+
+        const handleBuyProduct = async (e, id) => {
+        await addToCart(e, id);
+        fetchUserAddToCart();
+        navigate("/cart");
+    };
     return (
         <div className='container mx-auto p-4'>
             <div className=' min-h-[200px] flex flex-col lg:flex-row gap-4'>
                 {/**Product Img */}
                 <div className='h-auto flex flex-col lg:flex-row-reverse gap-4'>
-                    <div className='h-[300px] w-[300px] lg:h-[500px] lg:w-[500px] bg-slate-200 relative p-2'>
+                    <div className='h-[345px] w-[345px] lg:h-[500px] lg:w-[500px] bg-slate-200 relative p-2'>
                         <img src={activeImage} alt="" className='h-full w-full object-scale-down mix-blend-multiply' onMouseMove={handleZoomImage} onMouseLeave={handleLeaveImageZoom} />
                         {/**Product Zoom */}
                         {
